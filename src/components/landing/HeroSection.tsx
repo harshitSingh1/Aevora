@@ -58,7 +58,7 @@ export function HeroSection() {
             
             <motion.div variants={item}>
               <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-xl">
-                Aevora connects your treatment, hospital estimates, insurance, and bills to show where your healthcare costs come from — and what you should verify before paying.
+                Aevora connects your treatment, hospital estimates, insurance, and bills to show where your healthcare costs come from, and what you should verify before paying.
               </p>
             </motion.div>
             

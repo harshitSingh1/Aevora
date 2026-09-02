@@ -203,7 +203,7 @@ export default function CareOptionsPage() {
                            opt.estimatedCost?.min ? "text-xl text-foreground" : "text-md text-emerald-700 dark:text-emerald-500"
                          )}>
                            {opt.estimatedCost?.min 
-                             ? `${formatCurrency(opt.estimatedCost.min)} – ${formatCurrency(opt.estimatedCost.max!)}`
+                             ? `${formatCurrency(opt.estimatedCost.min)} - ${formatCurrency(opt.estimatedCost.max!)}`
                              : opt.estimatedCost?.label
                            }
                          </p>

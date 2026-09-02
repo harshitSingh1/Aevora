@@ -56,7 +56,7 @@ export function HowItWorksSection() {
                   {step.num}
                 </div>
                 <h3 className="text-xl font-semibold text-foreground mb-4 relative z-10">
-                  <span className="text-primary mr-2">{step.num} —</span>
+                  <span className="text-primary mr-2">{step.num}. </span>
                   {step.title}
                 </h3>
                 <p className="text-muted-foreground leading-relaxed relative z-10">

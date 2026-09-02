@@ -35,7 +35,7 @@ export function TalkExperience() {
   } = sessionParams
 
   const voiceParams = useVoiceConversation(sessionParams)
-  const { startCall, endCall, interrupt, submitQuery, timer, isMicActive, toggleMic } = voiceParams
+  const { startCall, endCall, interrupt, submitQuery, timer, isMicActive, toggleMic, audioState } = voiceParams
 
   const [textInput, setTextInput] = React.useState("")
   const [showTranscript, setShowTranscript] = React.useState(true)
@@ -46,13 +46,23 @@ export function TalkExperience() {
     return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`
   }
 
+  const finding = React.useMemo(() => {
+    if (!currentCase || !context.findingId) return null
+    return mockFindings[currentCase.id]?.find(f => f.id === context.findingId)
+  }, [currentCase, context.findingId])
+
   // Pre-fill suggested questions based on context
-  const suggestedQuestions = [
+  const suggestedQuestions = finding ? [
     "Why was this charge added?",
     "What should I ask billing?",
     "Is this covered by insurance?",
     "What should I do next?"
-  ]
+  ] : [
+    "Explain the bill to me.",
+    "Why is my bill so high?",
+    "Was I overcharged?",
+    "What should I do next?"
+  ];
 
   
   const handleExportTranscript = () => {
@@ -92,13 +102,11 @@ export function TalkExperience() {
     }
   }
   
-  const finding = React.useMemo(() => {
-    if (!currentCase || !context.findingId) return null
-    return mockFindings[currentCase.id]?.find(f => f.id === context.findingId)
-  }, [currentCase, context.findingId])
+
 
   return (
     <div className="flex flex-col lg:flex-row h-[calc(100vh-100px)] w-full gap-4 max-w-6xl mx-auto">
+  
       {/* Main Call Area */}
       <Card className="flex-1 flex flex-col bg-surface border-border overflow-hidden relative">
         <div className="p-4 flex items-center justify-between border-b border-border bg-muted/20 z-10">
@@ -177,10 +185,11 @@ export function TalkExperience() {
                 </div>
                 
                 <div className="text-center h-12 mb-8">
-                  {callState === "listening" && <p className="text-lg text-muted-foreground">Listening...</p>}
-                  {callState === "thinking" && <p className="text-lg text-muted-foreground">Aevora is checking your case...</p>}
-                  {callState === "speaking" && <p className="text-lg font-medium text-primary">Aevora speaking...</p>}
+                  {callState === "listening" && <p className="text-lg text-muted-foreground">Listening</p>}
+                  {callState === "thinking" && <p className="text-lg text-muted-foreground">Thinking...</p>}
+                  {callState === "speaking" && <p className="text-lg font-medium text-primary">Aevora is speaking</p>}
                   {callState === "active" && <p className="text-lg text-muted-foreground">Ready</p>}
+                  {audioState === "error" && <p className="text-sm text-destructive mt-1">Voice unavailable</p>}
                 </div>
 
                 {/* Suggestions if active and no input */}

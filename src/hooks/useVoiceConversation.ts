@@ -15,8 +15,11 @@ export function useVoiceConversation(
 ) {
   const { context, messages, addMessage, callState, setCallState, language } = sessionParams;
   const [audioState, setAudioState] = useState<AudioState>("idle");
+  const [aiTelemetry, setAiTelemetry] = useState<any>(null);
+  const [voiceTelemetry, setVoiceTelemetry] = useState<any>(null);
   const [timer, setTimer] = useState(0);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const turnRef = useRef(0);
 
   // Fake speech recognition for demo
   const [isMicActive, setIsMicActive] = useState(false);
@@ -82,35 +85,51 @@ export function useVoiceConversation(
   const submitQuery = useCallback(async (text: string) => {
     if (!text.trim()) return;
     
+    turnRef.current += 1;
+    const currentTurn = turnRef.current;
+    
     interrupt();
     
     addMessage({
       role: "user",
       text,
-      source: "typed" // or voice
+      source: "typed"
     });
-
     setCallState("thinking");
-
+    
     try {
-      const response = await talkAIService.generateAdvocacyResponse(context, messages);
+      const currentMessages = [...messages, { id: Date.now().toString(), role: "user" as const, text, timestamp: new Date().toISOString(), source: "typed" as const }];
+      const response = await talkAIService.generateAdvocacyResponse(context, currentMessages);
       
+      if (turnRef.current !== currentTurn) return; // Stale request, ignore
+
       addMessage({
         role: "assistant",
         text: response.text,
         source: "voice",
         relatedDocumentIds: response.relatedDocumentIds
       });
-
+      
+      setAiTelemetry(response.telemetry || null);
       if (response.shouldSpeak) {
         setCallState("speaking");
-        await browserSpeechService.speak(response.text, language === "hi" ? "hi-IN" : "en-IN");
-        setCallState("active");
+        const { success, telemetry } = await browserSpeechService.speak(response.speechText || response.text, language === "hi" ? "hi-IN" : "en-IN");
+        setVoiceTelemetry(telemetry || null);
+        if (!success) {
+          setAudioState("error");
+          // Optionally add a system message or flag to show voice unavailable
+        }
+        if (turnRef.current === currentTurn) {
+          setCallState("active");
+        }
       } else {
-        setCallState("active");
+        if (turnRef.current === currentTurn) {
+          setCallState("active");
+        }
       }
     } catch (error) {
-      console.error(error);
+      if (turnRef.current !== currentTurn) return;
+      console.warn("Conversation API warning:", error);
       addMessage({
         role: "system",
         text: "Aevora couldn't generate a response right now.",
@@ -119,6 +138,12 @@ export function useVoiceConversation(
       setCallState("active");
     }
   }, [context, messages, addMessage, setCallState, interrupt, language]);
+
+  useEffect(() => {
+    return () => {
+      browserSpeechService.stop();
+    };
+  }, []);
 
   // Demo mic toggle
   const toggleMic = useCallback(() => {
@@ -148,6 +173,8 @@ export function useVoiceConversation(
     timer,
     isMicActive,
     toggleMic,
-    audioState
+    audioState,
+    aiTelemetry,
+    voiceTelemetry
   };
 }

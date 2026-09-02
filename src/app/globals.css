@@ -3,6 +3,8 @@
 
 @theme {
   --color-background: var(--background);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
   --color-foreground: var(--foreground);
   --color-surface: var(--surface);
   --color-surface-muted: var(--surface-muted);
@@ -33,6 +35,8 @@
     --foreground: #0B1F33;
     
     --surface: #FFFFFF;
+    --popover: #FFFFFF;
+    --popover-foreground: #0B1F33;
     --surface-muted: #F1F5F9;
 
     --primary: #0B1F33;
@@ -63,6 +67,8 @@
     --background: #0B1F33;
     --foreground: #F7F9FC;
     --surface: #102A43;
+    --popover: #102A43;
+    --popover-foreground: #F7F9FC;
     --surface-muted: #243B53;
     --border: #243B53;
     --muted: #243B53;
