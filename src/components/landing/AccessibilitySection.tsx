@@ -26,7 +26,7 @@ export function AccessibilitySection() {
               Built for everyone.
             </h2>
             <p className="text-muted-foreground leading-relaxed">
-              Healthcare affects all of us. CareLedger is designed to be accessible, legible, and easy to navigate regardless of how you use your device.
+              Healthcare affects all of us. Aevora is designed to be accessible, legible, and easy to navigate regardless of how you use your device.
             </p>
           </motion.div>
 

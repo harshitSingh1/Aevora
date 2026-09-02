@@ -11,7 +11,7 @@ export function DecisionSection() {
     "Accepting the final bill as absolute",
   ]
 
-  const withCareLedger = [
+  const withAevora = [
     "Automated timeline construction",
     "Highlighted financial drift",
     "Specific, evidence-based questions",
@@ -35,7 +35,7 @@ export function DecisionSection() {
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12">
-          {/* Without CareLedger */}
+          {/* Without Aevora */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -54,7 +54,7 @@ export function DecisionSection() {
             </ul>
           </motion.div>
 
-          {/* With CareLedger */}
+          {/* With Aevora */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -63,9 +63,9 @@ export function DecisionSection() {
             className="bg-primary/5 rounded-2xl p-8 border border-primary/20 shadow-sm relative overflow-hidden"
           >
             <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-            <h3 className="text-xl font-semibold text-primary mb-6 relative z-10">With CareLedger</h3>
+            <h3 className="text-xl font-semibold text-primary mb-6 relative z-10">With Aevora</h3>
             <ul className="space-y-4 relative z-10">
-              {withCareLedger.map((item, idx) => (
+              {withAevora.map((item, idx) => (
                 <li key={idx} className="flex items-start gap-3 text-foreground">
                   <Check className="w-5 h-5 text-primary shrink-0 mt-0.5" />
                   <span>{item}</span>

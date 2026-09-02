@@ -29,7 +29,7 @@ export function FinancialDriftShowcase() {
               <span className="text-emerald-400">know why.</span>
             </h2>
             <p className="text-lg md:text-xl text-slate-300 leading-relaxed max-w-xl">
-              A final bill can look very different from the original estimate. CareLedger traces the changes instead of hiding them inside one final number.
+              A final bill can look very different from the original estimate. Aevora traces the changes instead of hiding them inside one final number.
             </p>
           </motion.div>
 

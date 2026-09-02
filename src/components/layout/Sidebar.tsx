@@ -21,7 +21,7 @@ import {
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { AIIndicator } from "@/components/careledger/AIIndicator"
+import { AIIndicator } from "@/components/aevora/AIIndicator"
 
 const mainNavItems = [
   { title: "Overview", href: "/dashboard", icon: LayoutDashboard },
@@ -46,7 +46,7 @@ export function Sidebar() {
         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
           <HeartPulse className="h-5 w-5" />
         </div>
-        <span className="text-xl font-semibold tracking-tight text-primary">CareLedger</span>
+        <span className="text-xl font-semibold tracking-tight text-primary">Aevora</span>
       </Link>
 
       <div className="flex-1 overflow-y-auto space-y-6 hide-scrollbar pb-6">
@@ -119,7 +119,7 @@ export function Sidebar() {
                 <div className="flex items-center gap-2 w-full">
                   <Mic className={cn("h-4 w-4", pathname === "/talk" ? "text-accent" : "text-muted-foreground")} />
                   <span className={cn("text-sm font-medium", pathname === "/talk" ? "text-primary" : "text-foreground")}>
-                    Talk to CareLedger
+                    Talk to Aevora
                   </span>
                 </div>
                 <div className="pl-6 w-full flex items-center justify-between">
@@ -148,7 +148,7 @@ export function Sidebar() {
       <div className="mt-auto pt-4 border-t border-border shrink-0 space-y-4">
         <div className="px-2">
           <p className="text-[10px] text-muted-foreground leading-tight">
-            <span className="font-semibold text-foreground">Privacy-first:</span> Your healthcare documents are sensitive. CareLedger is designed to minimize unnecessary data exposure.
+            <span className="font-semibold text-foreground">Privacy-first:</span> Your healthcare documents are sensitive. Aevora is designed to minimize unnecessary data exposure.
           </p>
         </div>
         <div className="flex items-center justify-between w-full p-2 rounded-lg hover:bg-muted/50 cursor-pointer transition-colors group">

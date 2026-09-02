@@ -10,7 +10,7 @@ interface AIIndicatorProps {
   text?: string
 }
 
-export function AIIndicator({ className, text = "CareLedger AI" }: AIIndicatorProps) {
+export function AIIndicator({ className, text = "Aevora AI" }: AIIndicatorProps) {
   return (
     <div className={cn("inline-flex items-center gap-2", className)}>
       <motion.div

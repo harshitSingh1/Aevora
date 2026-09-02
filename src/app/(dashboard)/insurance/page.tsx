@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { formatCurrency, cn } from "@/lib/utils"
 import { motion } from "motion/react"
-import { InsuranceCoverageBadge } from "@/components/careledger/insurance/InsuranceCoverageBadge"
+import { InsuranceCoverageBadge } from "@/components/aevora/insurance/InsuranceCoverageBadge"
 import { ShieldCheck, FileText, Mic, Copy, AlertTriangle, ArrowRight, CheckCircle2, Link as LinkIcon, ChevronRight } from "lucide-react"
 import Link from "next/link"
 
@@ -71,7 +71,7 @@ export default function InsurancePage() {
               <Link href="/talk?context=insurance">
                 <Button className="gap-2 bg-accent text-accent-foreground hover:bg-accent/90">
                   <Mic className="h-4 w-4" />
-                  <span className="hidden sm:inline">Talk to CareLedger</span>
+                  <span className="hidden sm:inline">Talk to Aevora</span>
                   <span className="sm:hidden">Talk</span>
                 </Button>
               </Link>
@@ -292,7 +292,7 @@ export default function InsurancePage() {
                      <Link href="/talk?context=insurance" className="inline-flex">
                         <Button variant="ghost" size="sm" className="h-8 gap-1.5 text-accent hover:text-accent hover:bg-accent/10">
                           <Mic className="h-3.5 w-3.5" />
-                          <span className="text-xs">Ask CareLedger</span>
+                          <span className="text-xs">Ask Aevora</span>
                         </Button>
                      </Link>
                    </div>
@@ -305,7 +305,7 @@ export default function InsurancePage() {
         {/* DISCLAIMER */}
         <div className="pb-12 text-center max-w-2xl mx-auto">
           <p className="text-xs text-muted-foreground">
-            CareLedger summarizes available information and helps you prepare questions. It does not determine medical necessity, guarantee coverage, or replace professional advice. Always verify final amounts with your insurer and healthcare provider.
+            Aevora summarizes available information and helps you prepare questions. It does not determine medical necessity, guarantee coverage, or replace professional advice. Always verify final amounts with your insurer and healthcare provider.
           </p>
         </div>
         

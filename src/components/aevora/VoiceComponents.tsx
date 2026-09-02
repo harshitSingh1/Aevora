@@ -32,7 +32,7 @@ export function VoiceButton({ state, onClick, className }: VoiceButtonProps) {
       {isIdleOrEnded ? (
         <>
           <Phone className="h-5 w-5" />
-          <span>Talk to CareLedger</span>
+          <span>Talk to Aevora</span>
         </>
       ) : (
         <>
@@ -57,7 +57,7 @@ export function VoiceStatus({ state, className }: VoiceStatusProps) {
     connected: "Connected",
     listening: "Listening...",
     thinking: "Analyzing...",
-    speaking: "CareLedger is speaking",
+    speaking: "Aevora is speaking",
     ended: "Call ended",
   }
 

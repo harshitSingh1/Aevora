@@ -7,7 +7,7 @@ export function ResponsibleAISection() {
   const principles = [
     {
       title: "We don't diagnose.",
-      desc: "CareLedger helps users understand information, not identify diseases.",
+      desc: "Aevora helps users understand information, not identify diseases.",
       icon: <Activity className="w-6 h-6" />
     },
     {

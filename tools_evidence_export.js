@@ -8,7 +8,7 @@ function addEvidenceExport() {
   const handleExportEvidence = () => {
     if (!selectedFinding) return;
     const text = [
-      'CARELEDGER EVIDENCE PACK',
+      'AEVORA EVIDENCE PACK',
       '========================',
       \`Case: \${currentCase?.patientName}\`,
       \`Finding: \${selectedFinding.title}\`,
@@ -26,7 +26,7 @@ function addEvidenceExport() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = \`careledger-evidence-\${selectedFinding.id}.txt\`;
+    a.download = \`aevora-evidence-\${selectedFinding.id}.txt\`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);

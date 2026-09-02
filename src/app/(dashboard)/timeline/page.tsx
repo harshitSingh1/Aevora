@@ -4,8 +4,8 @@ import { useCase } from "@/lib/context/CaseContext"
 import { mockTimelineEvents } from "@/lib/mock-data"
 import { CareTimelineEvent } from "@/types"
 import { formatCurrency, cn } from "@/lib/utils"
-import { TimelineEventCard } from "@/components/careledger/timeline/TimelineEventCard"
-import { CareCommitmentGraph } from "@/components/careledger/timeline/CareCommitmentGraph"
+import { TimelineEventCard } from "@/components/aevora/timeline/TimelineEventCard"
+import { CareCommitmentGraph } from "@/components/aevora/timeline/CareCommitmentGraph"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Search, Filter, FileText, AlertCircle, TrendingUp } from "lucide-react"
@@ -157,7 +157,7 @@ export default function TimelinePage() {
                     onSelect={() => setSelectedEventIdState(event.id)}
                     onAskClick={() => {
                       // Navigate to talk placeholder logic
-                      alert("Connecting to CareLedger Voice AI for event: " + event.id)
+                      alert("Connecting to Aevora Voice AI for event: " + event.id)
                     }}
                   />
                   

@@ -46,7 +46,7 @@ export function useVoiceConversation(
   const startCall = useCallback(() => {
     setCallState("ringing");
     // Play ringing sound (mocked with timeout)
-    const ringAudio = new Audio("/sounds/careledger-ring.mp3");
+    const ringAudio = new Audio("/sounds/aevora-ring.mp3");
     ringAudio.play().catch(() => console.log("Audio autoplay blocked")); // graceful fallback
     
     setTimeout(() => {
@@ -113,7 +113,7 @@ export function useVoiceConversation(
       console.error(error);
       addMessage({
         role: "system",
-        text: "CareLedger couldn't generate a response right now.",
+        text: "Aevora couldn't generate a response right now.",
         source: "system"
       });
       setCallState("active");

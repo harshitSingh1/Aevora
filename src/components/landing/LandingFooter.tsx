@@ -13,7 +13,7 @@ export function LandingFooter() {
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
                 <HeartPulse className="h-5 w-5" />
               </div>
-              <span className="text-xl font-semibold tracking-tight text-primary">CareLedger</span>
+              <span className="text-xl font-semibold tracking-tight text-primary">Aevora</span>
             </Link>
             <p className="text-lg text-muted-foreground max-w-sm">
               Know what you&apos;re agreeing to. Before you pay for it.
@@ -36,7 +36,7 @@ export function LandingFooter() {
               </li>
               <li>
                 <Link href="#talk-to-ai" className="text-muted-foreground hover:text-foreground text-sm">
-                  Talk to CareLedger
+                  Talk to Aevora
                 </Link>
               </li>
             </ul>
@@ -84,7 +84,7 @@ export function LandingFooter() {
 
         <div className="pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} CareLedger
+            © {new Date().getFullYear()} Aevora
           </p>
           <p className="text-sm text-muted-foreground text-center md:text-right">
             Built for healthcare clarity. Not medical advice.

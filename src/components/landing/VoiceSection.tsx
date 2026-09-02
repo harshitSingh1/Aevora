@@ -26,10 +26,10 @@ export function VoiceSection() {
           >
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-white leading-[1.1] mb-6">
               Still have a question? <br />
-              <span className="text-cyan-400">Just talk to CareLedger.</span>
+              <span className="text-cyan-400">Just talk to Aevora.</span>
             </h2>
             <p className="text-lg md:text-xl text-slate-300 leading-relaxed max-w-xl mb-8">
-              Ask about your bill, insurance, documents, or what you should ask your doctor. CareLedger already understands the case you&apos;re looking at.
+              Ask about your bill, insurance, documents, or what you should ask your doctor. Aevora already understands the case you&apos;re looking at.
             </p>
           </motion.div>
 
@@ -39,7 +39,7 @@ export function VoiceSection() {
               <div className="w-full flex justify-between items-center mb-8">
                 <div className="flex items-center gap-2">
                   <div className="w-2.5 h-2.5 rounded-full bg-cyan-500 animate-pulse" />
-                  <span className="text-sm font-medium text-slate-300">CareLedger AI</span>
+                  <span className="text-sm font-medium text-slate-300">Aevora AI</span>
                 </div>
                 <span className="text-xs text-slate-500 font-mono">00:00</span>
               </div>
@@ -71,7 +71,7 @@ export function VoiceSection() {
                         <Phone className="w-10 h-10 animate-pulse" />
                         <div className="absolute inset-0 rounded-full border-2 border-cyan-500 animate-ping opacity-50" />
                       </div>
-                      <p className="mt-6 text-slate-400 font-medium animate-pulse">Calling CareLedger...</p>
+                      <p className="mt-6 text-slate-400 font-medium animate-pulse">Calling Aevora...</p>
                     </motion.div>
                   )}
 

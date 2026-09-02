@@ -13,7 +13,7 @@ export function HowItWorksSection() {
     {
       num: "02",
       title: "Connect",
-      desc: "CareLedger connects the documents into one treatment and financial timeline.",
+      desc: "Aevora connects the documents into one treatment and financial timeline.",
     },
     {
       num: "03",

@@ -1,8 +1,8 @@
 "use client"
 
 import { PageHeader } from "@/components/layout/PageHeader"
-import { DocumentUploader } from "@/components/careledger/DocumentUploader"
-import { DocumentCard } from "@/components/careledger/DocumentCard"
+import { DocumentUploader } from "@/components/aevora/DocumentUploader"
+import { DocumentCard } from "@/components/aevora/DocumentCard"
 
 export default function DocumentsPage() {
   return (

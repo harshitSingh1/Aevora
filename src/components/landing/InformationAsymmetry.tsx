@@ -82,7 +82,7 @@ export function InformationAsymmetry() {
               <Link2 className="h-6 w-6" />
             </div>
             <p className="font-semibold text-foreground md:absolute md:top-full md:mt-4 md:w-64 md:-ml-32 md:left-1/2 text-center">
-              CareLedger connects the pieces.
+              Aevora connects the pieces.
             </p>
           </motion.div>
         </div>

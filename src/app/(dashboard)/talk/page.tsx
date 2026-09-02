@@ -11,7 +11,7 @@ export default function TalkPage() {
       </React.Suspense>
       <div className="mt-8 text-center">
         <p className="text-[10px] text-muted-foreground">
-          CareLedger provides information and advocacy support based on available case data. It does not replace medical, legal, insurance, or professional advice.
+          Aevora provides information and advocacy support based on available case data. It does not replace medical, legal, insurance, or professional advice.
         </p>
       </div>
     </div>

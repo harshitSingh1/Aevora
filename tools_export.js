@@ -16,7 +16,7 @@ function addTalkExport() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = \`careledger-transcript-\${new Date().toISOString().split('T')[0]}.txt\`;
+    a.download = \`aevora-transcript-\${new Date().toISOString().split('T')[0]}.txt\`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);

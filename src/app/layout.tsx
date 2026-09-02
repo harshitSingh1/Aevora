@@ -2,16 +2,16 @@ import type {Metadata} from 'next';
 import './globals.css'; // Global styles
 
 export const metadata: Metadata = {
-  title: 'CareLedger',
-  description: 'Understand your healthcare journey. CareLedger connects your treatment, estimates, insurance, and bills into one clear financial story.',
+  title: 'Aevora',
+  description: 'Understand your healthcare journey. Aevora connects your treatment, estimates, insurance, and bills into one clear financial story.',
   openGraph: {
-    title: 'CareLedger',
+    title: 'Aevora',
     description: 'Understand your healthcare journey.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'CareLedger',
+    title: 'Aevora',
     description: 'Understand your healthcare journey.',
   },
 };

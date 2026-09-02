@@ -2,7 +2,7 @@ import Link from "next/link"
 import { HeartPulse, ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { CareFlow } from "@/components/careledger/CareFlow"
+import { CareFlow } from "@/components/aevora/CareFlow"
 
 export default function LoginPage() {
   return (
@@ -14,14 +14,14 @@ export default function LoginPage() {
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
               <HeartPulse className="h-6 w-6" />
             </div>
-            <span className="text-2xl font-semibold tracking-tight text-primary">CareLedger</span>
+            <span className="text-2xl font-semibold tracking-tight text-primary">Aevora</span>
           </Link>
 
           <h1 className="text-4xl font-bold tracking-tight text-foreground max-w-lg mb-6">
             Understand your healthcare journey.
           </h1>
           <p className="text-lg text-muted-foreground max-w-md mb-12">
-            CareLedger connects your treatment, estimates, insurance, and bills into one clear financial story.
+            Aevora connects your treatment, estimates, insurance, and bills into one clear financial story.
           </p>
 
           <div className="max-w-lg">
@@ -34,7 +34,7 @@ export default function LoginPage() {
         </div>
         
         <div className="text-sm text-muted-foreground">
-          © {new Date().getFullYear()} CareLedger. Built for healthcare clarity.
+          © {new Date().getFullYear()} Aevora. Built for healthcare clarity.
         </div>
       </div>
 

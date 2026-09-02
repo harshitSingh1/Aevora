@@ -4,13 +4,13 @@ import * as React from "react"
 import Link from "next/link"
 import { ArrowRight, Plus, Mic } from "lucide-react"
 import { PageHeader } from "@/components/layout/PageHeader"
-import { CareFlow } from "@/components/careledger/CareFlow"
+import { CareFlow } from "@/components/aevora/CareFlow"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { FinancialDriftIndicator } from "@/components/careledger/FinancialDriftIndicator"
-import { FindingCard } from "@/components/careledger/FindingCard"
-import { DocumentCard } from "@/components/careledger/DocumentCard"
-import { AIIndicator } from "@/components/careledger/AIIndicator"
+import { FinancialDriftIndicator } from "@/components/aevora/FinancialDriftIndicator"
+import { FindingCard } from "@/components/aevora/FindingCard"
+import { DocumentCard } from "@/components/aevora/DocumentCard"
+import { AIIndicator } from "@/components/aevora/AIIndicator"
 
 import { useCase } from "@/lib/context/CaseContext"
 import { SummaryCards } from "@/components/dashboard/SummaryCards"
@@ -140,9 +140,9 @@ export default function DashboardOverview() {
             <div className="absolute top-0 right-0 w-64 h-64 bg-accent/10 rounded-full blur-3xl translate-x-1/3 -translate-y-1/3 pointer-events-none" />
             <div className="space-y-4 relative z-10 text-center md:text-left">
               <h2 className="text-2xl md:text-3xl font-semibold">Still have a question?</h2>
-              <h3 className="text-xl md:text-2xl text-accent font-medium">Talk to CareLedger</h3>
+              <h3 className="text-xl md:text-2xl text-accent font-medium">Talk to Aevora</h3>
               <p className="text-muted-foreground max-w-md text-sm md:text-base">
-                Ask about your bill, insurance, or documents. CareLedger understands the context of your case.
+                Ask about your bill, insurance, or documents. Aevora understands the context of your case.
               </p>
             </div>
             <div className="relative z-10 shrink-0">

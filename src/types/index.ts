@@ -132,7 +132,7 @@ export type FinancialFinding = {
   recommendedQuestion?: string;
   recommendation?: string;
   documentFact?: string;
-  careledgerInsight?: string;
+  aevoraInsight?: string;
 };
 
 export type FinancialCharge = {

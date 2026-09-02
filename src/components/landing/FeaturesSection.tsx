@@ -37,7 +37,7 @@ export function FeaturesSection() {
       colSpan: "md:col-span-1 lg:col-span-1",
     },
     {
-      title: "Talk to CareLedger",
+      title: "Talk to Aevora",
       desc: "Ask questions naturally using voice and receive concise, context-aware answers.",
       icon: <Mic className="h-6 w-6" />,
       colSpan: "md:col-span-2 lg:col-span-2",

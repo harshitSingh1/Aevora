@@ -20,7 +20,7 @@ export function EvidenceSection() {
             <span className="text-primary">Show the evidence.</span>
           </h2>
           <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
-            CareLedger should explain why something was flagged and show the information that led to the finding.
+            Aevora should explain why something was flagged and show the information that led to the finding.
           </p>
         </motion.div>
 

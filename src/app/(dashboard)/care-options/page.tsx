@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { cn, formatCurrency } from "@/lib/utils"
 import { motion, AnimatePresence } from "motion/react"
-import { EligibilityIndicator } from "@/components/careledger/care-options/EligibilityIndicator"
+import { EligibilityIndicator } from "@/components/aevora/care-options/EligibilityIndicator"
 import { Mic, Info, ShieldCheck, MapPin, Clock, Stethoscope, ChevronRight, X, HeartPulse, AlertCircle } from "lucide-react"
 import Link from "next/link"
 import { CarePreferences, CareOption } from "@/types"
@@ -95,7 +95,7 @@ export default function CareOptionsPage() {
             <Link href="/talk?context=care-option">
               <Button className="gap-2 bg-accent text-accent-foreground hover:bg-accent/90">
                 <Mic className="h-4 w-4" />
-                <span className="hidden sm:inline">Ask CareLedger</span>
+                <span className="hidden sm:inline">Ask Aevora</span>
                 <span className="sm:hidden">Ask</span>
               </Button>
             </Link>
@@ -104,7 +104,7 @@ export default function CareOptionsPage() {
         <div className="mt-4 p-3 bg-muted/40 rounded-lg border border-border/50 text-xs text-muted-foreground flex items-start gap-2">
            <Info className="h-4 w-4 shrink-0 text-primary mt-0.5" />
            <p>
-             <strong>CareLedger does not determine which treatment is medically appropriate.</strong> Discuss treatment choices with a qualified healthcare professional.
+             <strong>Aevora does not determine which treatment is medically appropriate.</strong> Discuss treatment choices with a qualified healthcare professional.
            </p>
         </div>
       </div>

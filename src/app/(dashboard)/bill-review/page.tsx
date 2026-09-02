@@ -10,8 +10,8 @@ import { Button } from "@/components/ui/button"
 import { ArrowRight, AlertCircle, Search, Filter, Mic, ChevronRight, Bookmark } from "lucide-react"
 import { motion, AnimatePresence } from "motion/react"
 import Link from "next/link"
-import { EvidenceLevelBadge } from "@/components/careledger/EvidenceLevelBadge"
-import { SyntheticBillViewer } from "@/components/careledger/bill-review/SyntheticBillViewer"
+import { EvidenceLevelBadge } from "@/components/aevora/EvidenceLevelBadge"
+import { SyntheticBillViewer } from "@/components/aevora/bill-review/SyntheticBillViewer"
 import { Input } from "@/components/ui/input"
 
 export default function BillReviewPage() {
@@ -98,7 +98,7 @@ function BillReviewContent() {
       <div className="shrink-0 border-b border-border px-4 md:px-8 py-4 bg-background z-20 flex flex-col md:flex-row justify-between md:items-center gap-4">
         <div>
           <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
-            <Link href="/dashboard" className="hover:text-foreground transition-colors">CareLedger</Link>
+            <Link href="/dashboard" className="hover:text-foreground transition-colors">Aevora</Link>
             <ChevronRight className="w-3 h-3" />
             <Link href="/financial-analysis" className="hover:text-foreground transition-colors">Financial Intelligence</Link>
             <ChevronRight className="w-3 h-3" />
@@ -240,11 +240,11 @@ function BillReviewContent() {
                     </div>
                     <div>
                       <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2 flex items-center gap-2">
-                        CareLedger Insight
+                        Aevora Insight
                         <span className="bg-primary/10 text-primary text-[10px] px-1.5 py-0.5 rounded font-bold tracking-normal uppercase">AI</span>
                       </p>
                       <p className="text-sm text-muted-foreground leading-relaxed">
-                        {selectedFinding.careledgerInsight}
+                        {selectedFinding.aevoraInsight}
                       </p>
                     </div>
                     <div>
@@ -267,7 +267,7 @@ function BillReviewContent() {
                     
                     <div className="flex flex-col sm:flex-row gap-3">
                       <Link href={`/talk?finding=${selectedFinding.id}`} className="flex-1">
-                        <Button className="w-full gap-2"><Mic className="w-4 h-4" /> Ask CareLedger</Button>
+                        <Button className="w-full gap-2"><Mic className="w-4 h-4" /> Ask Aevora</Button>
                       </Link>
                       <Link href={`/advocacy?finding=${selectedFinding.id}`} className="flex-1">
                         <Button variant="outline" className="w-full gap-2 border-amber-500/20 text-amber-700 dark:text-amber-500 hover:bg-amber-500/10">
@@ -279,7 +279,7 @@ function BillReviewContent() {
                   
                   <div className="bg-muted p-2 text-center border-t border-border">
                     <p className="text-[10px] text-muted-foreground">
-                      CareLedger identifies areas for review based on available documents. A flagged item is not proof of an incorrect or fraudulent charge.
+                      Aevora identifies areas for review based on available documents. A flagged item is not proof of an incorrect or fraudulent charge.
                     </p>
                   </div>
                 </motion.div>

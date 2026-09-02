@@ -1,6 +1,6 @@
-# CareLedger
+# Aevora
 
-CareLedger is a patient advocacy platform that connects healthcare bills, evidence, insurance context, care options, and actionable next steps.
+Aevora is a patient advocacy platform that connects healthcare bills, evidence, insurance context, care options, and actionable next steps.
 
 ## The Problem
 
@@ -10,19 +10,19 @@ Healthcare bills are incredibly complex, and patients often struggle to understa
 
 **Understand -> Verify -> Ask -> Act**
 
-CareLedger provides a transparent experience for patients to make sense of their medical journey. It offers:
+Aevora provides a transparent experience for patients to make sense of their medical journey. It offers:
 - Detailed financial analysis
 - Clear evidence connections
 - Relevant insurance context
 - Insightful care option comparison
 - Guided advocacy questions
-- Interactive "Talk to CareLedger" voice and chat
+- Interactive "Talk to Aevora" voice and chat
 - Concrete action plans
 - Downloadable evidence packs
 
 ## Key Differentiator
 
-CareLedger is not simply an OCR bill reader or a generic medical chatbot. It is a **patient advocacy layer** connecting financial findings directly to concrete evidence and actionable, guided conversations.
+Aevora is not simply an OCR bill reader or a generic medical chatbot. It is a **patient advocacy layer** connecting financial findings directly to concrete evidence and actionable, guided conversations.
 
 ## Features
 
@@ -33,7 +33,7 @@ CareLedger is not simply an OCR bill reader or a generic medical chatbot. It is 
 - **Insurance Reconciliation:** Contextualize costs against covered approvals.
 - **Care Options:** Explore synthetic benchmark data and alternatives.
 - **Advocacy Center:** Plan and track questions for doctors or billing departments.
-- **Talk to CareLedger:** A simulated call experience for conversational guidance.
+- **Talk to Aevora:** A simulated call experience for conversational guidance.
 - **Action Plans:** Convert discussions into concrete tasks.
 - **Evidence Packs:** Consolidate data for offline or written discussions.
 - **Demo Mode:** Fully functional synthetic local environment.
@@ -43,7 +43,7 @@ CareLedger is not simply an OCR bill reader or a generic medical chatbot. It is 
 ```text
 Next.js
    ↓
-CareLedger Application
+Aevora Application
    ↓
 Shared Case Context
    ├── Timeline
@@ -118,14 +118,14 @@ ELEVENLABS_API_KEY=your_key_here
 3. Select **Additional Procedure - ₹28,000**
 4. View evidence
 5. Open **Advocacy**
-6. **Talk to CareLedger**
+6. **Talk to Aevora**
 7. Ask *"Why was this charge added?"*
 8. Add action to plan
 9. Create **Evidence Pack**
 
 ## Responsible AI
 
-CareLedger:
+Aevora:
 - **Does not diagnose** patients.
 - **Does not replace** professionals (doctors, billing staff, insurance agents).
 - **Does not automatically declare fraud** or malpractice.
@@ -138,7 +138,7 @@ CareLedger:
 ```text
 src/
 ├── app/               # Next.js App Router pages
-├── components/        # React components (Dashboard, CareLedger, Layout)
+├── components/        # React components (Dashboard, Aevora, Layout)
 ├── lib/               # Utilities, Contexts, and Mock Data
 ├── services/          # Abstracted logic (AI, Voice, Advocacy)
 └── types/             # TypeScript interfaces
@@ -155,7 +155,7 @@ npm run lint
 
 ## Deployment
 
-CareLedger is designed as a Next.js application, easily deployable to Vercel or any Node.js hosting provider. Ensure your production environment variables are properly configured without hardcoding credentials in the repository.
+Aevora is designed as a Next.js application, easily deployable to Vercel or any Node.js hosting provider. Ensure your production environment variables are properly configured without hardcoding credentials in the repository.
 
 ## Synthetic Data Disclaimer
 

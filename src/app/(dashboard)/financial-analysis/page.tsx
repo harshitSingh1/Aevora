@@ -10,8 +10,8 @@ import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip as Recharts
 import { ArrowRight, AlertCircle, FileText, CheckCircle2, Mic, Receipt, Info, Download, Bookmark } from "lucide-react"
 import { motion, AnimatePresence } from "motion/react"
 import Link from "next/link"
-import { EvidenceLevelBadge } from "@/components/careledger/EvidenceLevelBadge"
-import { FinancialDriftIndicator } from "@/components/careledger/FinancialDriftIndicator"
+import { EvidenceLevelBadge } from "@/components/aevora/EvidenceLevelBadge"
+import { FinancialDriftIndicator } from "@/components/aevora/FinancialDriftIndicator"
 
 export default function FinancialAnalysisPage() {
   const { currentCase } = useCase()
@@ -140,7 +140,7 @@ export default function FinancialAnalysisPage() {
                 </Button>
                 <Link href="/talk" className="w-full">
                   <Button variant="outline" size="lg" className="w-full gap-2 text-primary border-primary/20 hover:bg-primary/5">
-                    <Mic className="w-4 h-4" /> Talk to CareLedger
+                    <Mic className="w-4 h-4" /> Talk to Aevora
                   </Button>
                 </Link>
               </div>

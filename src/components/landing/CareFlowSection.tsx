@@ -28,7 +28,7 @@ export function CareFlowSection() {
             <span className="text-muted-foreground">Not just the bill.</span>
           </h2>
           <p className="text-xl text-muted-foreground leading-relaxed">
-            CareLedger connects what was recommended, what was estimated, what insurance approved, what happened during treatment, and what finally appeared on the bill.
+            Aevora connects what was recommended, what was estimated, what insurance approved, what happened during treatment, and what finally appeared on the bill.
           </p>
         </div>
 

@@ -30,7 +30,7 @@ export function QuickActions() {
       bg: "bg-info/10"
     },
     {
-      title: "Talk to CareLedger",
+      title: "Talk to Aevora",
       description: "Ask a question about your case.",
       icon: Mic,
       href: "/talk",

@@ -17,7 +17,7 @@ export const mockFindings: Record<string, FinancialFinding[]> = {
       relatedEventId: "event-05",
       relatedChargeId: "charge-005",
       recommendedQuestion: "Could you provide an itemized breakdown of the ₹28,000 procedure charge and explain when it was added?",
-      careledgerInsight: "The charge appears on the final bill but not the original estimate. The documents confirm the charge, but they don't show whether the additional cost was discussed beforehand."
+      aevoraInsight: "The charge appears on the final bill but not the original estimate. The documents confirm the charge, but they don't show whether the additional cost was discussed beforehand."
     },
     {
       id: "diagnostic-001",
@@ -33,7 +33,7 @@ export const mockFindings: Record<string, FinancialFinding[]> = {
       relatedEventId: "event-05",
       relatedChargeId: "charge-006",
       recommendedQuestion: "Could you provide the detailed reports for the additional diagnostic tests billed?",
-      careledgerInsight: "Evidence incomplete. Verify the necessity and details of the additional tests."
+      aevoraInsight: "Evidence incomplete. Verify the necessity and details of the additional tests."
     },
     {
       id: "consumables-001",
@@ -48,7 +48,7 @@ export const mockFindings: Record<string, FinancialFinding[]> = {
       ],
       relatedChargeId: "charge-008",
       recommendedQuestion: "Could you provide a detailed list of the consumables billed?",
-      careledgerInsight: "Review recommended to ensure consumables align with standard procedure requirements."
+      aevoraInsight: "Review recommended to ensure consumables align with standard procedure requirements."
     }
   ]
 };

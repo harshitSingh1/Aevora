@@ -15,7 +15,7 @@ import { Mic, ArrowRight, CheckCircle2, ChevronRight, FileText, AlertCircle, Pho
 import { motion, AnimatePresence } from "motion/react"
 import { cn } from "@/lib/utils"
 import { Finding } from "@/types"
-import { AIIndicator } from "@/components/careledger/AIIndicator"
+import { AIIndicator } from "@/components/aevora/AIIndicator"
 
 export default function AdvocacyCenterPage() {
   return (
@@ -60,7 +60,7 @@ function AdvocacyContent() {
   const handleExportEvidence = () => {
     if (!selectedFinding) return;
     const text = [
-      'CARELEDGER EVIDENCE PACK',
+      'AEVORA EVIDENCE PACK',
       '========================',
       `Case: ${currentCase?.patientName}`,
       `Finding: ${selectedFinding.title}`,
@@ -78,7 +78,7 @@ function AdvocacyContent() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `careledger-evidence-${selectedFinding.id}.txt`;
+    a.download = `aevora-evidence-${selectedFinding.id}.txt`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -130,7 +130,7 @@ function AdvocacyContent() {
           </Button>
           <Button onClick={() => router.push("/talk")}>
             <Mic className="w-4 h-4 mr-2" />
-            Talk to CareLedger
+            Talk to Aevora
           </Button>
         </div>
       </div>
@@ -207,7 +207,7 @@ function AdvocacyContent() {
                   <CheckCircle2 className="w-8 h-8 mx-auto text-emerald-500 mb-3" />
                   <h3 className="text-lg font-medium text-foreground mb-1">Nothing needs advocacy yet.</h3>
                   <p className="text-muted-foreground text-sm max-w-sm mx-auto">
-                    CareLedger will surface questions when your documents contain something that needs clarification.
+                    Aevora will surface questions when your documents contain something that needs clarification.
                   </p>
                 </div>
               )}
@@ -448,7 +448,7 @@ function AdvocacyContent() {
             <Card className="p-4 bg-surface border-border flex-1 overflow-y-auto">
               <h3 className="text-sm font-semibold mb-3">Escalation</h3>
               <p className="text-xs text-muted-foreground mb-4">
-                If your question remains unanswered, CareLedger can help you understand possible next steps.
+                If your question remains unanswered, Aevora can help you understand possible next steps.
               </p>
               
               <div className="space-y-4">
@@ -470,7 +470,7 @@ function AdvocacyContent() {
               
               <div className="mt-4 pt-4 border-t border-border">
                 <p className="text-[10px] text-muted-foreground leading-tight">
-                  Escalation options vary by provider, insurer, location, and situation. Verify the appropriate process with the relevant organization. CareLedger does not provide legal advice.
+                  Escalation options vary by provider, insurer, location, and situation. Verify the appropriate process with the relevant organization. Aevora does not provide legal advice.
                 </p>
               </div>
             </Card>
@@ -491,7 +491,7 @@ function AdvocacyContent() {
               <div className="p-4 border-b border-border flex items-center justify-between bg-muted/20">
                 <h2 className="text-lg font-bold flex items-center gap-2">
                   <BriefcaseMedical className="w-5 h-5 text-primary" />
-                  CareLedger Evidence Pack
+                  Aevora Evidence Pack
                 </h2>
                 <Button variant="ghost" size="icon" onClick={() => setShowEvidencePack(false)}>
                   <span className="sr-only">Close</span>

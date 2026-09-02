@@ -8,7 +8,7 @@ import {
   TestTube, Receipt, ChevronDown, ChevronUp, AlertCircle, FileSearch, ArrowRight
 } from "lucide-react"
 import { motion, AnimatePresence } from "motion/react"
-import { EvidenceBadge } from "@/components/careledger/EvidenceBadge"
+import { EvidenceBadge } from "@/components/aevora/EvidenceBadge"
 
 const ICONS = {
   recommendation: Stethoscope,
@@ -152,7 +152,7 @@ export function TimelineEventCard({ event, isSelected, onSelect, onAskClick }: T
                               e.stopPropagation();
                               onAskClick();
                             }}>
-                              Ask CareLedger <ArrowRight className="w-4 h-4 ml-1.5" />
+                              Ask Aevora <ArrowRight className="w-4 h-4 ml-1.5" />
                             </Button>
                           </div>
                         )}

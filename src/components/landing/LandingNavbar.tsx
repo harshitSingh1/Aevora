@@ -30,7 +30,7 @@ export function LandingNavbar() {
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
             <HeartPulse className="h-5 w-5" />
           </div>
-          <span className="text-xl font-semibold tracking-tight text-primary">CareLedger</span>
+          <span className="text-xl font-semibold tracking-tight text-primary">Aevora</span>
         </Link>
 
         {/* Desktop Nav */}

@@ -62,7 +62,7 @@ export function TalkExperience() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `careledger-transcript-${new Date().toISOString().split('T')[0]}.txt`;
+    a.download = `aevora-transcript-${new Date().toISOString().split('T')[0]}.txt`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -104,7 +104,7 @@ export function TalkExperience() {
         <div className="p-4 flex items-center justify-between border-b border-border bg-muted/20 z-10">
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-sm font-medium">CareLedger Assistant</span>
+            <span className="text-sm font-medium">Aevora Assistant</span>
           </div>
           <div className="flex items-center gap-3 text-sm text-muted-foreground">
             {callState !== "idle" && callState !== "ended" && (
@@ -133,7 +133,7 @@ export function TalkExperience() {
                 <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center mb-6">
                   <Mic className="w-10 h-10 text-primary" />
                 </div>
-                <h2 className="text-2xl font-bold mb-2">Talk to CareLedger</h2>
+                <h2 className="text-2xl font-bold mb-2">Talk to Aevora</h2>
                 <p className="text-muted-foreground mb-8">
                   Your case-aware patient advocacy assistant. Ask about your bill, insurance, or what to ask next.
                 </p>
@@ -161,7 +161,7 @@ export function TalkExperience() {
                     <Loader2 className="w-8 h-8 text-primary animate-spin" />
                   </div>
                 </div>
-                <h2 className="text-xl font-medium">{callState === "ringing" ? "Calling CareLedger..." : "Connecting your case context..."}</h2>
+                <h2 className="text-xl font-medium">{callState === "ringing" ? "Calling Aevora..." : "Connecting your case context..."}</h2>
               </motion.div>
             )}
 
@@ -178,8 +178,8 @@ export function TalkExperience() {
                 
                 <div className="text-center h-12 mb-8">
                   {callState === "listening" && <p className="text-lg text-muted-foreground">Listening...</p>}
-                  {callState === "thinking" && <p className="text-lg text-muted-foreground">CareLedger is checking your case...</p>}
-                  {callState === "speaking" && <p className="text-lg font-medium text-primary">CareLedger speaking...</p>}
+                  {callState === "thinking" && <p className="text-lg text-muted-foreground">Aevora is checking your case...</p>}
+                  {callState === "speaking" && <p className="text-lg font-medium text-primary">Aevora speaking...</p>}
                   {callState === "active" && <p className="text-lg text-muted-foreground">Ready</p>}
                 </div>
 
@@ -264,7 +264,7 @@ export function TalkExperience() {
             )}
             <div className="text-xs text-muted-foreground flex items-center gap-1 mt-2">
               <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-              Using your selected CareLedger case
+              Using your selected Aevora case
             </div>
           </Card>
 
@@ -283,7 +283,7 @@ export function TalkExperience() {
                 messages.map(msg => (
                   <div key={msg.id} className={cn("flex flex-col max-w-[85%]", msg.role === "user" ? "ml-auto" : "mr-auto")}>
                     <div className={cn("text-[10px] font-semibold uppercase tracking-wider mb-1", msg.role === "user" ? "text-right text-muted-foreground" : "text-left text-primary")}>
-                      {msg.role === "user" ? "You" : "CareLedger"}
+                      {msg.role === "user" ? "You" : "Aevora"}
                     </div>
                     <div className={cn("p-3 rounded-xl text-sm", msg.role === "user" ? "bg-primary text-primary-foreground rounded-tr-sm" : "bg-muted text-foreground rounded-tl-sm")}>
                       {msg.text}

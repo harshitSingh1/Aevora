@@ -33,7 +33,7 @@ export function AppHeader({ title }: AppHeaderProps) {
           <h2 className="text-lg font-semibold text-foreground hidden sm:block">{title}</h2>
         ) : (
           <div className="hidden sm:flex items-center gap-2 text-sm font-medium text-muted-foreground">
-            CareLedger <span className="text-border">/</span> <span className="text-foreground">Overview</span>
+            Aevora <span className="text-border">/</span> <span className="text-foreground">Overview</span>
           </div>
         )}
       </div>

@@ -58,7 +58,7 @@ export function HeroSection() {
             
             <motion.div variants={item}>
               <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-xl">
-                CareLedger connects your treatment, hospital estimates, insurance, and bills to show where your healthcare costs come from — and what you should verify before paying.
+                Aevora connects your treatment, hospital estimates, insurance, and bills to show where your healthcare costs come from — and what you should verify before paying.
               </p>
             </motion.div>
             
@@ -78,7 +78,7 @@ export function HeroSection() {
             <motion.div variants={item} className="mt-4 p-4 rounded-xl bg-surface/50 border border-border/50 max-w-xl">
               <p className="text-sm text-muted-foreground">
                 <strong className="text-foreground font-medium">Built for clarity, not diagnosis.</strong><br/>
-                CareLedger helps users understand healthcare documents and financial decisions. It does not replace their doctor.
+                Aevora helps users understand healthcare documents and financial decisions. It does not replace their doctor.
               </p>
             </motion.div>
           </motion.div>
