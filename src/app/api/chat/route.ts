@@ -26,12 +26,7 @@ Do not repeat information the user already knows unless it is necessary.
 Think: Understand -> Verify -> Ask -> Act.
 Answer first. Explain briefly. Then stop.
 
-Output your response as JSON matching this schema:
-{
-  "answer": "The text to display in the UI (can include markdown if needed, but usually plain)",
-  "speechText": "The text to send to the text-to-speech engine (no markdown, spoken numbers like twenty-eight-thousand rupees, natural pauses)",
-  "intent": "capability | navigation | finding | billing | insurance | action | unknown"
-}
+Respond directly in plain text. Your exact response will be spoken to the user. Do not use asterisks, bolding, or markdown. Use spoken numbers (e.g. "twenty-eight thousand") instead of symbols.
 `;
 
 export async function POST(req: NextRequest) {
@@ -62,23 +57,28 @@ Finding ID: ${context?.findingId || "none"}
 (Only use this if relevant to the user's latest question)
 `;
 
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 20000);
+
     const response = await fetch("https://api.featherless.ai/v1/chat/completions", {
+      signal: controller.signal,
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${process.env.FEATHERLESS_API_KEY}`
       },
       body: JSON.stringify({
-        model: "Qwen/Qwen2.5-7B-Instruct", // or similar fast conversational model
+        model: "Qwen/Qwen2.5-7B-Instruct",
         messages: [
           { role: "system", content: SYSTEM_PROMPT + contextPrompt },
           ...history
         ],
         temperature: 0.1,
-        max_tokens: 250,
-        response_format: { type: "json_object" }
+        max_tokens: 250
       })
     });
+
+    clearTimeout(timeoutId);
 
     if (!response.ok) {
       console.info("Featherless bypassed/failed (expected if no key):", await response.text());
@@ -92,17 +92,11 @@ Finding ID: ${context?.findingId || "none"}
     let text = "I am unable to provide a response right now.";
     let speechText = text;
     
-    try {
-      const parsed = JSON.parse(data.choices?.[0]?.message?.content || "{}");
-      text = parsed.answer || text;
-      speechText = parsed.speechText || parsed.answer || text;
-    } catch (e) {
-      text = data.choices?.[0]?.message?.content || text;
-      speechText = text.replace(/[#*→✓☐\-_]/g, ""); // basic cleanup
-    }
+    text = data.choices?.[0]?.message?.content || text;
+    speechText = text.replace(/[#*→✓☐\-_]/g, "");
 
     if (process.env.NODE_ENV !== "production") {
-      console.log(`[Aevora AI] provider=Featherless model=meta-llama/Meta-Llama-3-8B-Instruct status=Success latency=${Date.now() - startTime}ms`);
+      console.log(`[Aevora AI] provider=Featherless model=Qwen/Qwen2.5-7B-Instruct status=Success latency=${Date.now() - startTime}ms`);
     }
 
     return NextResponse.json({
@@ -110,7 +104,14 @@ Finding ID: ${context?.findingId || "none"}
       speechText,
       shouldSpeak: true
     });
-  } catch (error) {
+  } catch (error: any) {
+    if (error.name === 'AbortError') {
+      return NextResponse.json({ 
+        text: "I'm sorry, I am taking too long to think. Please try asking again.",
+        speechText: "I'm sorry, I am taking too long to think. Please try asking again.",
+        shouldSpeak: true 
+      }, { status: 200 });
+    }
     console.warn("Chat API warning:", error);
     if (process.env.NODE_ENV !== "production") {
       console.log(`[Aevora AI ERROR] provider=Featherless status=Failed latency=${Date.now() - startTime}ms`);

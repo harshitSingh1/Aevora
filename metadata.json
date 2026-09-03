@@ -1,6 +1,6 @@
 {
   "name": "Aevora",
   "description": "An AI-powered patient financial and care advocate.",
-  "requestFramePermissions": [],
+  "requestFramePermissions": ["microphone"],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

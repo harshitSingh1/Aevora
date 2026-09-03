@@ -8,6 +8,7 @@ import { useVoiceConversation } from "@/hooks/useVoiceConversation"
 import { TalkContext, CallState } from "@/types"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
+import { VoiceDiagnostics } from "./VoiceDiagnostics"
 import { VoiceWaveform } from "@/components/talk/VoiceWaveform"
 import { Mic, PhoneOff, MicOff, Settings, List, FileText, ChevronRight, PlayCircle, Loader2, Download } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -106,7 +107,15 @@ export function TalkExperience() {
 
   return (
     <div className="flex flex-col lg:flex-row h-[calc(100vh-100px)] w-full gap-4 max-w-6xl mx-auto">
-  
+      <VoiceDiagnostics telemetry={{ 
+        callState, 
+        isMicActive: voiceParams.isMicActive, 
+        framesSent: voiceParams.framesSent,
+        stt: voiceParams.sttTelemetry, 
+        ai: voiceParams.aiTelemetry, 
+        tts: voiceParams.voiceTelemetry 
+      }} />
+      
       {/* Main Call Area */}
       <Card className="flex-1 flex flex-col bg-surface border-border overflow-hidden relative">
         <div className="p-4 flex items-center justify-between border-b border-border bg-muted/20 z-10">
@@ -205,6 +214,26 @@ export function TalkExperience() {
               </motion.div>
             )}
 
+            {callState === "error" && (
+              <motion.div 
+                key="error"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="flex flex-col items-center text-center max-w-md"
+              >
+                <div className="w-16 h-16 rounded-full bg-destructive/10 flex items-center justify-center mb-4">
+                  <PhoneOff className="w-8 h-8 text-destructive" />
+                </div>
+                <h2 className="text-2xl font-bold mb-2 text-destructive">Microphone Access Required</h2>
+                <p className="text-muted-foreground mb-8">
+                  We couldn&apos;t access your microphone. Please check your browser permissions or try typing a message instead.
+                </p>
+                <div className="flex gap-4">
+                  <Button variant="outline" onClick={() => setCallState("idle")}>Try again</Button>
+                  <Button onClick={() => router.push("/advocacy")}>Back to Advocacy</Button>
+                </div>
+              </motion.div>
+            )}
             {callState === "ended" && (
               <motion.div 
                 key="ended"

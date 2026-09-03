@@ -57,7 +57,9 @@ class PCMPlayer {
     }
     
     isFinished() {
-        return this.sources.length === 0 && this.nextTime > 0 && this.audioCtx && this.audioCtx.currentTime >= this.nextTime;
+        if (!this.isPlaying) return true;
+        if (this.nextTime === 0) return true; // If we never played anything, we're technically finished playing.
+        return this.sources.length === 0 && this.audioCtx && this.audioCtx.currentTime >= this.nextTime;
     }
 }
 
@@ -80,6 +82,7 @@ export function useVoiceConversation(
   const [timer, setTimer] = useState(0);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const turnRef = useRef(0);
+  const [framesSent, setFramesSent] = useState(0);
   const [isMicActive, setIsMicActive] = useState(false);
 
   const streamRef = useRef<MediaStream | null>(null);
@@ -194,22 +197,32 @@ export function useVoiceConversation(
         setCallState("speaking");
         const speechText = response.speechText || response.text;
         
-        let ttsToken = "demo_tts_token";
+        let ttsToken: string | null = null;
         try {
             const ttsRes = await fetch("/api/elevenlabs/token-tts", { method: "POST" });
-            const data = await ttsRes.json();
-            if (data.token) ttsToken = data.token;
+            if (ttsRes.status === 401) {
+                ttsToken = "missing_key";
+            } else {
+                const data = await ttsRes.json();
+                if (data.token) ttsToken = data.token;
+            }
         } catch(e) {}
 
         if (ttsToken === "demo_tts_token") {
-            // Mock TTS
-            setVoiceTelemetry({ provider: "Demo Fallback", model: "mock", voice: "EXAVITQu4vr4xnSDxMaL", latency: 500, status: "Success" });
+            setVoiceTelemetry({ provider: "Demo Fallback", model: "mock", voice: "default", latency: 50, status: "Success" });
             setTimeout(() => {
-                if (stateRef.current === 'speaking') {
-                    setCallState('listening');
-                }
+                if (stateRef.current === 'speaking') setCallState('listening');
             }, Math.min(3000, speechText.length * 50));
             return;
+        }
+
+        if (!ttsToken || ttsToken === "missing_key") {
+             setVoiceTelemetry({ provider: "ElevenLabs", model: "eleven_multilingual_v2", voice: "Aevora", latency: 0, status: "Failed (Missing Key)" });
+             setAudioState("error");
+             setTimeout(() => {
+                 if (stateRef.current === 'speaking') setCallState('listening');
+             }, 1000);
+             return;
         }
 
         await playCtxRef.current.init();
@@ -241,7 +254,7 @@ export function useVoiceConversation(
                 }
                 playCtxRef.current.playChunk(msg.audio);
             }
-            if (msg.isFinal) {
+            if (msg.isFinal || msg.is_final) {
                 ttsWs.close();
             }
         };
@@ -271,7 +284,7 @@ export function useVoiceConversation(
       });
       setCallState("listening");
     }
-  }, [addMessage, setCallState, interrupt]);
+  }, [addMessage, setCallState, interrupt, stopPlayback]);
 
   const startCall = useCallback(async () => {
     setCallState("connecting");
@@ -281,25 +294,37 @@ export function useVoiceConversation(
         setIsMicActive(true);
 
         // STT Setup
-        let sttToken = "demo_stt_token";
+        let sttToken: string | null = null;
         try {
             const sttRes = await fetch("/api/elevenlabs/token-stt", { method: "POST" });
-            const data = await sttRes.json();
-            if (data.token) sttToken = data.token;
+            if (sttRes.status === 401) {
+                sttToken = "missing_key";
+            } else {
+                const data = await sttRes.json();
+                if (data.token) sttToken = data.token;
+            }
         } catch(e) {}
         
         if (sttToken === "demo_stt_token") {
-            setSttTelemetry({ provider: "Demo Fallback", model: "mock", status: "Success", latency: 0 });
+            setSttTelemetry({ provider: "Demo Fallback", model: "mock", status: "Connected", latency: 0 });
             setCallState("active");
             
-            // Initial AI greeting mock
             const greeting = "Hi. What would you like to understand?";
             addMessage({ role: "assistant", text: greeting, source: "voice" });
             setCallState("speaking");
+            
             setTimeout(() => {
-                setCallState('listening');
-            }, 2000);
+                if (stateRef.current === 'speaking') setCallState('listening');
+            }, 3000);
             return;
+        }
+
+        if (!sttToken || sttToken === "missing_key") {
+             setSttTelemetry({ provider: "ElevenLabs", model: "scribe_v2_realtime", status: "Failed (Missing Key)", latency: 0 });
+             console.error("Missing ElevenLabs API Key");
+             setAudioState("error");
+             setCallState("error" as any);
+             return;
         }
 
         sttCtxRef.current = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 16000 });
@@ -328,13 +353,22 @@ export function useVoiceConversation(
             // Speak it
             setCallState("speaking");
             
-            let ttsToken = "demo_tts_token";
+            let ttsToken: string | null = null;
             fetch("/api/elevenlabs/token-tts", { method: "POST" })
-                .then(r => r.json())
-                .then(async data => {
-                    if (data.token) ttsToken = data.token;
+                .then(async r => {
+                    if (r.status === 401) {
+                        ttsToken = "missing_key";
+                    } else {
+                        const data = await r.json();
+                        if (data.token) ttsToken = data.token;
+                    }
                     if (ttsToken === "demo_tts_token") {
-                        setTimeout(() => setCallState('listening'), 2000);
+                        setTimeout(() => { if (stateRef.current === 'speaking') setCallState('listening'); }, 2000);
+                        return;
+                    }
+                    if (!ttsToken || ttsToken === "missing_key") {
+                        setAudioState("error");
+                        setTimeout(() => { if (stateRef.current === 'speaking') setCallState('listening'); }, 1000);
                         return;
                     }
                     await playCtxRef.current.init();
@@ -348,7 +382,7 @@ export function useVoiceConversation(
                     ttsWs.onmessage = (e) => {
                         const msg = JSON.parse(e.data.toString());
                         if (msg.audio) playCtxRef.current.playChunk(msg.audio);
-                        if (msg.isFinal) ttsWs.close();
+                        if (msg.isFinal || msg.is_final) ttsWs.close();
                     };
                     checkIntervalRef.current = setInterval(() => {
                         if (playCtxRef.current.isPlaying && ttsWs.readyState === WebSocket.CLOSED) {
@@ -363,6 +397,8 @@ export function useVoiceConversation(
         
         processor.onaudioprocess = (e) => {
             if (ws.readyState !== WebSocket.OPEN) return;
+            if (stateRef.current === 'speaking') return; // Do not send audio while speaking
+            
             const float32 = e.inputBuffer.getChannelData(0);
             const int16 = new Int16Array(float32.length);
             for (let i = 0; i < float32.length; i++) {
@@ -378,23 +414,26 @@ export function useVoiceConversation(
                 message_type: "input_audio_chunk",
                 audio_base_64: btoa(binary)
             }));
+            setFramesSent(prev => prev + 1);
         };
         
         ws.onmessage = (e) => {
             const data = JSON.parse(e.data.toString());
             const msgType = data.type || data.message_type;
+            
+            // Deterministic check: do not process transcripts while Aevora is speaking
+            if (stateRef.current === 'speaking') {
+                return;
+            }
+
             if (msgType === 'partial_transcript' && data.text) {
                 if (commitDebounce) clearTimeout(commitDebounce);
                 const text = data.text.trim();
                 if (text.length > 0) {
                     let isListening = stateRef.current === 'listening' || stateRef.current === 'active';
-                    if (stateRef.current === 'speaking' && text.length > 5) {
-                        interrupt();
-                        isListening = true; // Act as if we are listening now
-                    }
                     if (isListening) {
                         commitDebounce = setTimeout(() => {
-                            if (ws.readyState === WebSocket.OPEN) {
+                            if (ws.readyState === WebSocket.OPEN && stateRef.current !== 'speaking') {
                                 submitQuery(text);
                             }
                         }, 1500);
@@ -404,10 +443,7 @@ export function useVoiceConversation(
                 if (commitDebounce) clearTimeout(commitDebounce);
                 const text = data.text.trim();
                 if (text.length > 0) {
-                    if (stateRef.current === 'speaking') {
-                        interrupt();
-                    }
-                    if (stateRef.current === 'listening' || stateRef.current === 'active' || stateRef.current === 'speaking') {
+                    if (stateRef.current === 'listening' || stateRef.current === 'active') {
                         submitQuery(text);
                     }
                 }
@@ -428,13 +464,13 @@ export function useVoiceConversation(
         console.error("Failed to start call", err);
         setCallState("error" as any);
     }
-  }, [setCallState, submitQuery, interrupt]);
+  }, [setCallState, submitQuery, interrupt, addMessage, stopPlayback]);
 
   useEffect(() => {
     return () => {
       endCall();
     };
-  }, []);
+  }, [endCall]);
 
   const toggleMic = useCallback(() => {
     if (callState === "speaking") {
@@ -459,6 +495,7 @@ export function useVoiceConversation(
     isMicActive,
     toggleMic,
     audioState,
+    framesSent,
     aiTelemetry,
     voiceTelemetry,
     sttTelemetry
