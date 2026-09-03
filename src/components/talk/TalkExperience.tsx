@@ -113,7 +113,8 @@ export function TalkExperience() {
         framesSent: voiceParams.framesSent,
         stt: voiceParams.sttTelemetry, 
         ai: voiceParams.aiTelemetry, 
-        tts: voiceParams.voiceTelemetry 
+        tts: voiceParams.voiceTelemetry,
+        debugMetrics: voiceParams.debugMetrics
       }} />
       
       {/* Main Call Area */}

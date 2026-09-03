@@ -7,6 +7,9 @@ class PCMPlayer {
     sources: AudioBufferSourceNode[] = [];
     nextTime: number = 0;
     isPlaying: boolean = false;
+    onAudioPlayed?: (bytes: number) => void;
+    onPlaybackStarted?: () => void;
+    onPlaybackEnded?: () => void;
 
     async init() {
         if (!this.audioCtx) {
@@ -17,11 +20,13 @@ class PCMPlayer {
         }
         this.isPlaying = true;
         this.nextTime = this.audioCtx.currentTime;
+        this.onPlaybackStarted?.();
     }
 
     playChunk(base64: string) {
         if (!this.audioCtx || !this.isPlaying) return;
         const binary = atob(base64);
+        this.onAudioPlayed?.(binary.length);
         const bytes = new Uint8Array(binary.length);
         for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
         const int16 = new Int16Array(bytes.buffer);
@@ -54,6 +59,7 @@ class PCMPlayer {
         });
         this.sources = [];
         this.nextTime = 0;
+        this.onPlaybackEnded?.();
     }
     
     isFinished() {
@@ -84,6 +90,21 @@ export function useVoiceConversation(
   const turnRef = useRef(0);
   const [framesSent, setFramesSent] = useState(0);
   const [isMicActive, setIsMicActive] = useState(false);
+  
+  // Debug metrics
+  const [debugMetrics, setDebugMetrics] = useState({
+    micStreamCreated: false,
+    micTrackLive: false,
+    audioContextState: "none",
+    audioProcessorCreated: false,
+    processorCallbackCount: 0,
+    nonEmptyBufferCount: 0,
+    sttTokenReceived: false,
+    sttTokenStatus: "-",
+    ttsAudioBytes: 0,
+    ttsPlaybackStarted: false,
+    ttsPlaybackEnded: false,
+  });
 
   const streamRef = useRef<MediaStream | null>(null);
   const sttCtxRef = useRef<AudioContext | null>(null);
@@ -93,6 +114,18 @@ export function useVoiceConversation(
   const playCtxRef = useRef<PCMPlayer>(new PCMPlayer());
   const checkIntervalRef = useRef<any>(null);
 
+  useEffect(() => {
+    playCtxRef.current.onPlaybackStarted = () => {
+        setDebugMetrics(prev => ({ ...prev, ttsPlaybackStarted: true }));
+    };
+    playCtxRef.current.onPlaybackEnded = () => {
+        setDebugMetrics(prev => ({ ...prev, ttsPlaybackEnded: true }));
+    };
+    playCtxRef.current.onAudioPlayed = (bytes) => {
+        setDebugMetrics(prev => ({ ...prev, ttsAudioBytes: prev.ttsAudioBytes + bytes }));
+    };
+  }, []);
+
   const stateRef = useRef(callState);
   useEffect(() => { stateRef.current = callState; }, [callState]);
   const messagesRef = useRef(messages);
@@ -100,12 +133,22 @@ export function useVoiceConversation(
   const contextRef = useRef(context);
   useEffect(() => { contextRef.current = context; }, [context]);
 
+  const framesSentRef = useRef(0);
+  const nonEmptyBufferCountRef = useRef(0);
+  const processorCallbackCountRef = useRef(0);
+
   // Timer logic
   useEffect(() => {
     if (callState === "active" || callState === "listening" || callState === "thinking" || callState === "speaking") {
       if (!timerRef.current) {
         timerRef.current = setInterval(() => {
           setTimer(t => t + 1);
+          setFramesSent(framesSentRef.current);
+          setDebugMetrics(prev => ({
+             ...prev,
+             processorCallbackCount: processorCallbackCountRef.current,
+             nonEmptyBufferCount: nonEmptyBufferCountRef.current
+          }));
         }, 1000);
       }
     } else {
@@ -287,11 +330,38 @@ export function useVoiceConversation(
   }, [addMessage, setCallState, interrupt, stopPlayback]);
 
   const startCall = useCallback(async () => {
+    framesSentRef.current = 0;
+    nonEmptyBufferCountRef.current = 0;
+    processorCallbackCountRef.current = 0;
+    setFramesSent(0);
+
     setCallState("connecting");
+    
+    // SYNCHRONOUS AUDIO CONTEXT INITIALIZATION FOR MOBILE SAFARI
+    // Must happen before any `await` (like getUserMedia or fetch)
+    const sttCtx = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 16000 });
+    sttCtxRef.current = sttCtx;
+    
+    // Also initialize the TTS player AudioContext synchronously
+    if (!playCtxRef.current.audioCtx) {
+        playCtxRef.current.audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 24000 });
+    }
+    
+    // Attempt resume immediately
+    if (sttCtx.state === 'suspended') sttCtx.resume().catch(() => {});
+    if (playCtxRef.current.audioCtx.state === 'suspended') playCtxRef.current.audioCtx.resume().catch(() => {});
+
     try {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true } });
         streamRef.current = stream;
         setIsMicActive(true);
+        
+        const audioTrack = stream.getAudioTracks()[0];
+        setDebugMetrics(prev => ({ 
+            ...prev, 
+            micStreamCreated: true, 
+            micTrackLive: audioTrack?.readyState === "live" 
+        }));
 
         // STT Setup
         let sttToken: string | null = null;
@@ -299,11 +369,17 @@ export function useVoiceConversation(
             const sttRes = await fetch("/api/elevenlabs/token-stt", { method: "POST" });
             if (sttRes.status === 401) {
                 sttToken = "missing_key";
+                setDebugMetrics(prev => ({ ...prev, sttTokenStatus: "missing_key" }));
             } else {
                 const data = await sttRes.json();
-                if (data.token) sttToken = data.token;
+                if (data.token) {
+                    sttToken = data.token;
+                    setDebugMetrics(prev => ({ ...prev, sttTokenReceived: true, sttTokenStatus: "Received" }));
+                }
             }
-        } catch(e) {}
+        } catch(e) {
+            setDebugMetrics(prev => ({ ...prev, sttTokenStatus: "Fetch Error" }));
+        }
         
         if (sttToken === "demo_stt_token") {
             setSttTelemetry({ provider: "Demo Fallback", model: "mock", status: "Connected", latency: 0 });
@@ -327,12 +403,25 @@ export function useVoiceConversation(
              return;
         }
 
-        sttCtxRef.current = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 16000 });
-        await sttCtxRef.current.resume();
+        if (sttCtxRef.current?.state === 'suspended') {
+            await sttCtxRef.current.resume();
+        }
+        
+        setDebugMetrics(prev => ({ 
+            ...prev, 
+            audioContextState: sttCtxRef.current?.state || "unknown",
+        }));
+        
+        if (!sttCtxRef.current) throw new Error("AudioContext missing");
         
         const source = sttCtxRef.current.createMediaStreamSource(stream);
         const processor = sttCtxRef.current.createScriptProcessor(4096, 1, 1);
         processorRef.current = processor;
+        
+        setDebugMetrics(prev => ({ 
+            ...prev, 
+            audioProcessorCreated: !!processor 
+        }));
         
         const ws = new WebSocket(`wss://api.elevenlabs.io/v1/speech-to-text/realtime?token=${sttToken}`);
         sttWsRef.current = ws;
@@ -396,15 +485,20 @@ export function useVoiceConversation(
         };
         
         processor.onaudioprocess = (e) => {
+            processorCallbackCountRef.current += 1;
             if (ws.readyState !== WebSocket.OPEN) return;
             if (stateRef.current === 'speaking') return; // Do not send audio while speaking
             
             const float32 = e.inputBuffer.getChannelData(0);
+            let hasAudio = false;
             const int16 = new Int16Array(float32.length);
             for (let i = 0; i < float32.length; i++) {
+                if (float32[i] !== 0) hasAudio = true;
                 let s = Math.max(-1, Math.min(1, float32[i]));
                 int16[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
             }
+            if (hasAudio) nonEmptyBufferCountRef.current += 1;
+
             let binary = '';
             const bytes = new Uint8Array(int16.buffer);
             for (let i = 0; i < bytes.length; i++) {
@@ -414,7 +508,7 @@ export function useVoiceConversation(
                 message_type: "input_audio_chunk",
                 audio_base_64: btoa(binary)
             }));
-            setFramesSent(prev => prev + 1);
+            framesSentRef.current += 1;
         };
         
         ws.onmessage = (e) => {
@@ -496,6 +590,7 @@ export function useVoiceConversation(
     toggleMic,
     audioState,
     framesSent,
+    debugMetrics,
     aiTelemetry,
     voiceTelemetry,
     sttTelemetry
