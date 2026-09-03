@@ -81,31 +81,11 @@ export function useVoiceConversation(
 ) {
   const { context, messages, addMessage, callState, setCallState, language } = sessionParams;
   const [audioState, setAudioState] = useState<AudioState>("idle");
-  const [aiTelemetry, setAiTelemetry] = useState<any>(null);
-  const [voiceTelemetry, setVoiceTelemetry] = useState<any>(null);
-  const [sttTelemetry, setSttTelemetry] = useState<any>(null);
-  
+        
   const [timer, setTimer] = useState(0);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const turnRef = useRef(0);
-  const [framesSent, setFramesSent] = useState(0);
-  const [isMicActive, setIsMicActive] = useState(false);
-  
-  // Debug metrics
-  const [debugMetrics, setDebugMetrics] = useState({
-    micStreamCreated: false,
-    micTrackLive: false,
-    audioContextState: "none",
-    audioProcessorCreated: false,
-    processorCallbackCount: 0,
-    nonEmptyBufferCount: 0,
-    sttTokenReceived: false,
-    sttTokenStatus: "-",
-    ttsAudioBytes: 0,
-    ttsPlaybackStarted: false,
-    ttsPlaybackEnded: false,
-  });
-
+    const [isMicActive, setIsMicActive] = useState(false);
   const streamRef = useRef<MediaStream | null>(null);
   const sttCtxRef = useRef<AudioContext | null>(null);
   const processorRef = useRef<ScriptProcessorNode | null>(null);
@@ -115,15 +95,9 @@ export function useVoiceConversation(
   const checkIntervalRef = useRef<any>(null);
 
   useEffect(() => {
-    playCtxRef.current.onPlaybackStarted = () => {
-        setDebugMetrics(prev => ({ ...prev, ttsPlaybackStarted: true }));
-    };
-    playCtxRef.current.onPlaybackEnded = () => {
-        setDebugMetrics(prev => ({ ...prev, ttsPlaybackEnded: true }));
-    };
-    playCtxRef.current.onAudioPlayed = (bytes) => {
-        setDebugMetrics(prev => ({ ...prev, ttsAudioBytes: prev.ttsAudioBytes + bytes }));
-    };
+    
+    
+    
   }, []);
 
   const stateRef = useRef(callState);
@@ -133,22 +107,15 @@ export function useVoiceConversation(
   const contextRef = useRef(context);
   useEffect(() => { contextRef.current = context; }, [context]);
 
-  const framesSentRef = useRef(0);
-  const nonEmptyBufferCountRef = useRef(0);
-  const processorCallbackCountRef = useRef(0);
-
+      
   // Timer logic
   useEffect(() => {
     if (callState === "active" || callState === "listening" || callState === "thinking" || callState === "speaking") {
       if (!timerRef.current) {
         timerRef.current = setInterval(() => {
           setTimer(t => t + 1);
-          setFramesSent(framesSentRef.current);
-          setDebugMetrics(prev => ({
-             ...prev,
-             processorCallbackCount: processorCallbackCountRef.current,
-             nonEmptyBufferCount: nonEmptyBufferCountRef.current
-          }));
+          
+          
         }, 1000);
       }
     } else {
@@ -234,7 +201,7 @@ export function useVoiceConversation(
         relatedDocumentIds: response.relatedDocumentIds
       });
             
-      setAiTelemetry(response.telemetry || null);
+      
 
       if (response.shouldSpeak) {
         setCallState("speaking");
@@ -252,7 +219,7 @@ export function useVoiceConversation(
         } catch(e) {}
 
         if (ttsToken === "demo_tts_token") {
-            setVoiceTelemetry({ provider: "Demo Fallback", model: "mock", voice: "default", latency: 50, status: "Success" });
+            
             setTimeout(() => {
                 if (stateRef.current === 'speaking') setCallState('listening');
             }, Math.min(3000, speechText.length * 50));
@@ -260,7 +227,7 @@ export function useVoiceConversation(
         }
 
         if (!ttsToken || ttsToken === "missing_key") {
-             setVoiceTelemetry({ provider: "ElevenLabs", model: "eleven_multilingual_v2", voice: "Aevora", latency: 0, status: "Failed (Missing Key)" });
+             
              setAudioState("error");
              setTimeout(() => {
                  if (stateRef.current === 'speaking') setCallState('listening');
@@ -286,13 +253,13 @@ export function useVoiceConversation(
             const msg = JSON.parse(e.data.toString());
             if (msg.error) {
                 console.error("TTS WS Error:", msg.error);
-                setVoiceTelemetry({ provider: "ElevenLabs", model: "eleven_multilingual_v2", voice: "Aevora", latency: 0, status: "Failed" });
+                
                 setCallState('listening');
                 return;
             }
             if (msg.audio) {
                 if (!gotFirstAudio) {
-                    setVoiceTelemetry({ provider: "ElevenLabs", model: "eleven_multilingual_v2", voice: "Aevora", latency: Date.now() - ttsStartTime, status: "Success" });
+                    
                     gotFirstAudio = true;
                 }
                 playCtxRef.current.playChunk(msg.audio);
@@ -330,10 +297,10 @@ export function useVoiceConversation(
   }, [addMessage, setCallState, interrupt, stopPlayback]);
 
   const startCall = useCallback(async () => {
-    framesSentRef.current = 0;
-    nonEmptyBufferCountRef.current = 0;
-    processorCallbackCountRef.current = 0;
-    setFramesSent(0);
+    
+    
+    
+    
 
     setCallState("connecting");
     
@@ -357,11 +324,7 @@ export function useVoiceConversation(
         setIsMicActive(true);
         
         const audioTrack = stream.getAudioTracks()[0];
-        setDebugMetrics(prev => ({ 
-            ...prev, 
-            micStreamCreated: true, 
-            micTrackLive: audioTrack?.readyState === "live" 
-        }));
+        
 
         // STT Setup
         let sttToken: string | null = null;
@@ -369,20 +332,20 @@ export function useVoiceConversation(
             const sttRes = await fetch("/api/elevenlabs/token-stt", { method: "POST" });
             if (sttRes.status === 401) {
                 sttToken = "missing_key";
-                setDebugMetrics(prev => ({ ...prev, sttTokenStatus: "missing_key" }));
+                
             } else {
                 const data = await sttRes.json();
                 if (data.token) {
                     sttToken = data.token;
-                    setDebugMetrics(prev => ({ ...prev, sttTokenReceived: true, sttTokenStatus: "Received" }));
+                    
                 }
             }
         } catch(e) {
-            setDebugMetrics(prev => ({ ...prev, sttTokenStatus: "Fetch Error" }));
+            
         }
         
         if (sttToken === "demo_stt_token") {
-            setSttTelemetry({ provider: "Demo Fallback", model: "mock", status: "Connected", latency: 0 });
+            
             setCallState("active");
             
             const greeting = "Hi. What would you like to understand?";
@@ -396,7 +359,7 @@ export function useVoiceConversation(
         }
 
         if (!sttToken || sttToken === "missing_key") {
-             setSttTelemetry({ provider: "ElevenLabs", model: "scribe_v2_realtime", status: "Failed (Missing Key)", latency: 0 });
+             
              console.error("Missing ElevenLabs API Key");
              setAudioState("error");
              setCallState("error" as any);
@@ -407,10 +370,7 @@ export function useVoiceConversation(
             await sttCtxRef.current.resume();
         }
         
-        setDebugMetrics(prev => ({ 
-            ...prev, 
-            audioContextState: sttCtxRef.current?.state || "unknown",
-        }));
+        
         
         if (!sttCtxRef.current) throw new Error("AudioContext missing");
         
@@ -418,10 +378,7 @@ export function useVoiceConversation(
         const processor = sttCtxRef.current.createScriptProcessor(4096, 1, 1);
         processorRef.current = processor;
         
-        setDebugMetrics(prev => ({ 
-            ...prev, 
-            audioProcessorCreated: !!processor 
-        }));
+        
         
         const ws = new WebSocket(`wss://api.elevenlabs.io/v1/speech-to-text/realtime?token=${sttToken}`);
         sttWsRef.current = ws;
@@ -430,7 +387,7 @@ export function useVoiceConversation(
         let commitDebounce: any;
         
         ws.onopen = () => {
-            setSttTelemetry({ provider: "ElevenLabs", model: "scribe_v2_realtime", status: "Connected", latency: Date.now() - sttStart });
+            
             source.connect(processor);
             processor.connect(sttCtxRef.current!.destination);
             setCallState("active");
@@ -485,19 +442,19 @@ export function useVoiceConversation(
         };
         
         processor.onaudioprocess = (e) => {
-            processorCallbackCountRef.current += 1;
+            
             if (ws.readyState !== WebSocket.OPEN) return;
             if (stateRef.current === 'speaking') return; // Do not send audio while speaking
             
             const float32 = e.inputBuffer.getChannelData(0);
-            let hasAudio = false;
+            
             const int16 = new Int16Array(float32.length);
             for (let i = 0; i < float32.length; i++) {
-                if (float32[i] !== 0) hasAudio = true;
+                
                 let s = Math.max(-1, Math.min(1, float32[i]));
                 int16[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
             }
-            if (hasAudio) nonEmptyBufferCountRef.current += 1;
+            
 
             let binary = '';
             const bytes = new Uint8Array(int16.buffer);
@@ -508,7 +465,7 @@ export function useVoiceConversation(
                 message_type: "input_audio_chunk",
                 audio_base_64: btoa(binary)
             }));
-            framesSentRef.current += 1;
+            
         };
         
         ws.onmessage = (e) => {
@@ -546,7 +503,7 @@ export function useVoiceConversation(
         
         ws.onerror = (e) => {
             console.error("STT WS Error", e);
-            setSttTelemetry({ provider: "ElevenLabs", model: "scribe_v2_realtime", status: "Failed", latency: 0 });
+            
             setAudioState("error");
         };
 
@@ -589,10 +546,6 @@ export function useVoiceConversation(
     isMicActive,
     toggleMic,
     audioState,
-    framesSent,
-    debugMetrics,
-    aiTelemetry,
-    voiceTelemetry,
-    sttTelemetry
+    
   };
 }

@@ -8,7 +8,6 @@ import { useVoiceConversation } from "@/hooks/useVoiceConversation"
 import { TalkContext, CallState } from "@/types"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { VoiceDiagnostics } from "./VoiceDiagnostics"
 import { VoiceWaveform } from "@/components/talk/VoiceWaveform"
 import { Mic, PhoneOff, MicOff, Settings, List, FileText, ChevronRight, PlayCircle, Loader2, Download } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -107,15 +106,6 @@ export function TalkExperience() {
 
   return (
     <div className="flex flex-col lg:flex-row h-[calc(100vh-100px)] w-full gap-4 max-w-6xl mx-auto">
-      <VoiceDiagnostics telemetry={{ 
-        callState, 
-        isMicActive: voiceParams.isMicActive, 
-        framesSent: voiceParams.framesSent,
-        stt: voiceParams.sttTelemetry, 
-        ai: voiceParams.aiTelemetry, 
-        tts: voiceParams.voiceTelemetry,
-        debugMetrics: voiceParams.debugMetrics
-      }} />
       
       {/* Main Call Area */}
       <Card className="flex-1 flex flex-col bg-surface border-border overflow-hidden relative">
