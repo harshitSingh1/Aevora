@@ -1,9 +1,6 @@
 import { NextResponse } from "next/server";
 
 export async function POST() {
-    if (process.env.DEMO_MODE === "true") {
-        return NextResponse.json({ token: "demo_stt_token" });
-    }
     if (!process.env.ELEVENLABS_API_KEY) {
         return NextResponse.json({ error: "missing_key" }, { status: 401 });
     }
